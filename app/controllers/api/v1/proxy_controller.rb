@@ -4,14 +4,14 @@ require 'httparty'
 
 class Api::V1::ProxyController < ApplicationController
   def proxy
-    target_path = proxy_params[:path]
-    url = "https://restful-booker.herokuapp.com#{target_path}"
-    request_method_type = proxy_params[:method]&.upcase
+    endpoint = proxy_params[:endpoint]
+    url = "https://restful-booker.herokuapp.com#{endpoint}"
+    http_method = proxy_params[:http_method]&.upcase
     request_params = proxy_params[:proxy] || {}
     token = proxy_params[:token] || ''
 
     begin
-      response = case request_method_type
+      response = case http_method
                  when 'GET'
                    HTTParty.get(url, body: request_params.to_json, headers: request_headers(token))
                  when 'POST'
@@ -36,7 +36,7 @@ class Api::V1::ProxyController < ApplicationController
   private
 
   def proxy_params
-    params.permit(:token, :path, :method, proxy: {})
+    params.permit(:token, :endpoint, :http_method, proxy: {})
   end
 
   def request_headers(token)
