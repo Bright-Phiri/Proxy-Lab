@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
       render json: { error: 'Access Token Missing' }, status: :unauthorized
     else
       unless valid_access_token?(access_token)
-        render json: { error: 'Proxy Authentication Required' }, status: :unauthorized
+        render json: { error: 'Unauthorized' }, status: :unauthorized
       end
     end
   end
